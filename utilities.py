@@ -79,8 +79,12 @@ def load_glove_vectors(infile):
     fp = open(infile, 'rb')
     words = list(np.load(fp))
 
-    l = [el.decode('UTF-8') for el in words]
-    words = l
+    try:
+        l = [el.decode('UTF-8') for el in words]
+        words = l
+    except AttributeError:
+        print("Error!")
+        l = [el for el in words]
 
     vectors = np.load(fp)
     lengths = np.load(fp)
