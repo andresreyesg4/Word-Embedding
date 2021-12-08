@@ -68,15 +68,15 @@ def save_glove_vectors(outfile, data, words):
 def load_glove_vectors(infile):
     """loads pretrained model from numpy file containg words, word vectors,
     and lengths"""
-    infile = modeldir + infile + ".npy"
-    if not os.path.exists(infile):
+    fffff = modeldir + infile + ".npy"
+    if not os.path.exists(fffff):
         print("Error: vector file does not exist")
         print("Options are: ")
         for f in os.listdir(modeldir):
             if os.path.splitext(f)[1] == ".npy":
                 print(os.path.splitext(f)[0])
         exit()
-    fp = open(infile, 'rb')
+    fp = open(fffff, 'rb')
     words = list(np.load(fp))
 
     try:
