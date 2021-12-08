@@ -38,20 +38,20 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-
 datadir = "wordlists/"
+
 
 def loadwordlist(filename, reference):
     """loads and returns all words in the given file.  Omits words not in the
     word embedding matrix"""
-    if not os.path.exists(datadir+filename+".txt"):
+    if not os.path.exists(datadir + filename + ".txt"):
         print("Illegal target or attribute: %s" % filename)
         print("Options are: ")
         for f in os.listdir(datadir):
             print(os.path.splitext(f)[0])
         sys.exit()
     omits = []
-    with open(datadir+filename+".txt",'r') as f:
+    with open(datadir + filename + ".txt", 'r') as f:
         words = []
         for w in f.readlines():
             toInsert = w.strip().lower()
@@ -63,20 +63,26 @@ def loadwordlist(filename, reference):
             print("Warning: the following words from %s are not in the GloVe index: %s" % (filename, ', '.join(omits)))
     return words
 
+
 def getAverageSimilarity(targetVec, targetLength, attrVectors, attrLengths):
     """Calculates average similarity between words in the target list and attribute
     list"""
-    return np.average([cosine_similarity(targetVec, targetLength, attrVectors[i], attrLengths[i]) for i in range(attrVectors.shape[0])])
+    return np.average([cosine_similarity(targetVec, targetLength, attrVectors[i], attrLengths[i]) for i in
+                       range(attrVectors.shape[0])])
+
 
 def getListData(conceptWords, allWords, allArray, allLengths):
     """Return the GloVe Vectors and Lengths for a subset of conceptWords"""
     inds = [allWords.index(target) for target in conceptWords]
     return (allArray[inds], allLengths[inds])
 
-def rankAttributes(targetData, targetLengths, attrData, attrLengths, attrWords, n= 5):
+
+def rankAttributes(targetData, targetLengths, attrData, attrLengths, attrWords, n=5):
     """Return the n highest similarity scores between the target and all attr"""
-    attrSims = [getAverageSimilarity(attrData[i], attrLengths[i], targetData, targetLengths) for i in range(attrData.shape[0])]
+    attrSims = [getAverageSimilarity(attrData[i], attrLengths[i], targetData, targetLengths) for i in
+                range(attrData.shape[0])]
     return attrWords[np.argsort(attrSims)[-n:]]
+
 
 def main():
     if len(argv) != 6:
@@ -84,18 +90,18 @@ def main():
         print("   e.g., weatTest.py twitter flowers insect pleasant unpleasant")
         return
 
-    #parse inputs, load in glove vectors and wordlists
+    # parse inputs, load in glove vectors and wordlists
     wordlist, array, lengths = load_glove_vectors(argv[1])
-    
+
     target1Name = argv[2]
     target2Name = argv[3]
     attr1Name = argv[4]
     attr2Name = argv[5]
 
-    target1 = loadwordlist(target1Name,wordlist)
-    target2 = loadwordlist(target2Name,wordlist)
-    attribute1 = loadwordlist(attr1Name,wordlist)
-    attribute2 = loadwordlist(attr2Name,wordlist)
+    target1 = loadwordlist(target1Name, wordlist)
+    target2 = loadwordlist(target2Name, wordlist)
+    attribute1 = loadwordlist(attr1Name, wordlist)
+    attribute2 = loadwordlist(attr2Name, wordlist)
     if not (target1 and target2 and attribute1 and attribute2):
         print("Error loadding one of the word lists; lists are either empty")
         print(" or not in your learned word embedding data set")
@@ -106,45 +112,44 @@ def main():
     attr1Data, attr1Lengths = getListData(attribute1, wordlist, array, lengths)
     attr2Data, attr2Lengths = getListData(attribute2, wordlist, array, lengths)
 
-
-    #Find more similar attribute words for each target list
+    # Find more similar attribute words for each target list
     print()
     print("Top 5 most similar attribute words to %s:" % target1Name)
     topWordsT1 = rankAttributes(target1Data, target1Lengths, np.concatenate([attr1Data, attr2Data]),
-            np.concatenate([attr1Lengths, attr2Lengths]), np.concatenate([attribute1, attribute2]))
+                                np.concatenate([attr1Lengths, attr2Lengths]), np.concatenate([attribute1, attribute2]))
     for word in topWordsT1:
-        print("\t"+word)
+        print("\t" + word)
 
     print()
     print("Top 5 most similar attribute words to %s:" % target2Name)
 
     topWordsT2 = rankAttributes(target2Data, target2Lengths, np.concatenate([attr1Data, attr2Data]),
-            np.concatenate([attr1Lengths, attr2Lengths]), np.concatenate([attribute1, attribute2]))
+                                np.concatenate([attr1Lengths, attr2Lengths]), np.concatenate([attribute1, attribute2]))
     for word in topWordsT2:
-        print("\t"+word)
+        print("\t" + word)
 
     print()
-    #calculate similarities between target 1 and both attributes
+    # calculate similarities between target 1 and both attributes
     targ1attr1Sims = [getAverageSimilarity(target1Data[i], target1Lengths[i], attr1Data, attr1Lengths)
-        for i in range(target1Data.shape[0])]
+                      for i in range(target1Data.shape[0])]
     targ1attr2Sims = [getAverageSimilarity(target1Data[i], target1Lengths[i], attr2Data, attr2Lengths)
-        for i in range(target1Data.shape[0])]
+                      for i in range(target1Data.shape[0])]
     targ1SimDiff = np.subtract(targ1attr1Sims, targ1attr2Sims)
 
-    #calculate similarities between target 2 and both attributes
+    # calculate similarities between target 2 and both attributes
     targ2attr1Sims = [getAverageSimilarity(target2Data[i], target2Lengths[i], attr1Data, attr1Lengths)
-        for i in range(target2Data.shape[0])]
+                      for i in range(target2Data.shape[0])]
     targ2attr2Sims = [getAverageSimilarity(target2Data[i], target2Lengths[i], attr2Data, attr2Lengths)
-        for i in range(target2Data.shape[0])]
+                      for i in range(target2Data.shape[0])]
     targ2SimDiff = np.subtract(targ2attr1Sims, targ2attr2Sims)
 
-    #effect size is avg difference in similarities divided by standard dev
-    d = (np.average(targ1SimDiff) - np.average(targ2SimDiff))/np.std(np.concatenate((targ1SimDiff,targ2SimDiff)))
-
+    # effect size is avg difference in similarities divided by standard dev
+    d = (np.average(targ1SimDiff) - np.average(targ2SimDiff)) / np.std(np.concatenate((targ1SimDiff, targ2SimDiff)))
 
     print()
     print("Calculating effect size.  The score is between +2.0 and -2.0.  ")
-    print("Positive scores indicate that %s is more associated with %s than %s." % (target1Name, attr1Name, target2Name))
+    print(
+        "Positive scores indicate that %s is more associated with %s than %s." % (target1Name, attr1Name, target2Name))
     print("Or, equivalently, %s is more associated with %s than %s." % (target2Name, attr2Name, target1Name))
     print("Negative scores have the opposite relationship.")
     print("Scores close to 0 indicate little to no effect.")
@@ -154,7 +159,7 @@ def main():
     print()
     print("Plotting similarity scores...")
 
-    fig = plt.figure(figsize=(16,8))
+    fig = plt.figure(figsize=(16, 8))
     ax1 = fig.add_subplot(121)
     ax2 = fig.add_subplot(122)
     ax1.set_title("Similarities Scores for Target/Attribute Pairs")
@@ -162,27 +167,29 @@ def main():
 
     # Box plot of pairwise similarity scores
     df = pd.DataFrame()
-    df["Similarity"] = np.concatenate([targ1attr1Sims,targ1attr2Sims,targ2attr1Sims,targ2attr2Sims])
-    df["Pairs"] = [target1Name+"-"+attr1Name]*len(targ1attr1Sims)+[target1Name+"-"+attr2Name]*len(targ1attr2Sims)+[target2Name+"-"+attr1Name]*len(targ2attr1Sims) \
-      +[target2Name+"-"+attr2Name]*len(targ2attr2Sims)
-    df["Target"] = [target1Name]*len(targ1attr1Sims+targ1attr2Sims)+[target2Name]*len(targ2attr1Sims+targ2attr2Sims)
-    df["Attribute"] = [attr1Name]*len(targ1attr1Sims)+[attr2Name]*len(targ1attr2Sims)+[attr1Name]*len(targ2attr1Sims) +[attr2Name]*len(targ2attr2Sims)
-    sns.boxplot(x="Target", y="Similarity", hue="Attribute",data=df, ax=ax1)
-    #Box plot of target bias in similarities
+    df["Similarity"] = np.concatenate([targ1attr1Sims, targ1attr2Sims, targ2attr1Sims, targ2attr2Sims])
+    df["Pairs"] = [target1Name + "-" + attr1Name] * len(targ1attr1Sims) + [target1Name + "-" + attr2Name] * len(
+        targ1attr2Sims) + [target2Name + "-" + attr1Name] * len(targ2attr1Sims) \
+                  + [target2Name + "-" + attr2Name] * len(targ2attr2Sims)
+    df["Target"] = [target1Name] * len(targ1attr1Sims + targ1attr2Sims) + [target2Name] * len(
+        targ2attr1Sims + targ2attr2Sims)
+    df["Attribute"] = [attr1Name] * len(targ1attr1Sims) + [attr2Name] * len(targ1attr2Sims) + [attr1Name] * len(
+        targ2attr1Sims) + [attr2Name] * len(targ2attr2Sims)
+    sns.boxplot(x="Target", y="Similarity", hue="Attribute", data=df, ax=ax1)
+    # Box plot of target bias in similarities
     df = pd.DataFrame()
     df["Difference"] = np.concatenate([targ1SimDiff, targ2SimDiff])
-    df["Target"] = [target1Name]*len(targ1SimDiff) + [target2Name]*len(targ2SimDiff)
+    df["Target"] = [target1Name] * len(targ1SimDiff) + [target2Name] * len(targ2SimDiff)
     ax = sns.boxplot(x="Target", y="Difference", data=df, ax=ax2)
 
-    
     ticks = ax1.get_yticks()
-    mx = max(abs(ticks[0]),ticks[-1])
-    mx = int(mx*10+.99)/10.0
-    ax1.yaxis.set_ticks(np.arange(-mx,mx+.1,.1))
+    mx = max(abs(ticks[0]), ticks[-1])
+    mx = int(mx * 10 + .99) / 10.0
+    ax1.yaxis.set_ticks(np.arange(-mx, mx + .1, .1))
     ticks = ax2.get_yticks()
-    mx = max(abs(ticks[0]),ticks[-1])
-    mx = int(mx*10+.99)/10.0
-    ax2.yaxis.set_ticks(np.arange(-mx,mx+.1,.1))
+    mx = max(abs(ticks[0]), ticks[-1])
+    mx = int(mx * 10 + .99) / 10.0
+    ax2.yaxis.set_ticks(np.arange(-mx, mx + .1, .1))
 
     fig.subplots_adjust(wspace=0.5)
     fig.canvas.draw()
@@ -193,10 +200,10 @@ def main():
     ax1.set_yticklabels(labels)
     labels = [item.get_text() for item in ax2.get_yticklabels()]
     labels[0] = "(%s) " % attr2Name + labels[0]
-    labels[len(labels)//2] = "(neutral) 0.0"
+    labels[len(labels) // 2] = "(neutral) 0.0"
     labels[-1] = "(%s) " % attr1Name + labels[-1]
     ax2.set_yticklabels(labels)
-    
+
     plt.show()
 
 

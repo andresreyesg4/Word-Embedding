@@ -32,6 +32,7 @@ from utilities import *
 import numpy as np
 import sys
 
+
 def main():
     if len(sys.argv) != 4:
         print("usage: findSimilarWords.py npyFile queryWord numResults")
@@ -46,13 +47,14 @@ def main():
     index = wordlist.index(queryWord)
     vector = wordvecs[index]
     length = lengths[index]
-    sim_words = closest_vectors(vector, length, wordlist, wordvecs, lengths, nresults+1)
+    sim_words = closest_vectors(vector, length, wordlist, wordvecs, lengths, nresults + 1)
 
-    print("Printing %d most similar words to %s\n"%(nresults,queryWord))
-    print("%10s %10s" % ("word","score"))
-    print("-"*10+" "+"-"*10)
+    print("Printing %d most similar words to %s\n" % (nresults, queryWord))
+    print("%10s %10s" % ("word", "score"))
+    print("-" * 10 + " " + "-" * 10)
     for i in range(1, len(sim_words)):
         print("%10s %10.3f" % (sim_words[i]))
+
 
 if __name__ == "__main__":
     main()

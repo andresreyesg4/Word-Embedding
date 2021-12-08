@@ -23,33 +23,37 @@ from sys import argv, exit
 import os
 
 modeldir = "models/"
+
+
 def countlines(filename):
     """returns number of number of words in the file (rows) and number
     of features per word (cols)"""
-    with open(filename,'r') as f:
+    with open(filename, 'r') as f:
         lines = f.readlines()
         rows = len(lines)
-        cols = len(lines[0].split())-1
+        cols = len(lines[0].split()) - 1
 
     return rows, cols
+
 
 def readGlove(filename):
     """parses the pretrained model.  returns the list of words and 2D numpy
     array of word vectors (each row corresponds to the same index in word)"""
     rows, cols = countlines(filename)
-    data = np.zeros((rows,cols))
+    data = np.zeros((rows, cols))
     words = []
-    with open(filename,'r') as f:
+    with open(filename, 'r') as f:
         i = 0
         for line in f:
-           info = line.split()
-           if(len(info) != cols+1):
-               continue
-           words.append(info[0])
-           info = [float(info[j+1]) for j in range(len(info)-1)]
-           data[i] = info
-           i+=1
+            info = line.split()
+            if len(info) != cols + 1:
+                continue
+            words.append(info[0])
+            info = [float(info[j + 1]) for j in range(len(info) - 1)]
+            data[i] = info
+            i += 1
     return words, data
+
 
 def save_glove_vectors(outfile, data, words):
     """save loaded model as a numpy file with words. word vectors,
@@ -60,31 +64,34 @@ def save_glove_vectors(outfile, data, words):
     np.save(fp, compute_lengths(data))
     fp.close()
 
+
 def load_glove_vectors(infile):
     """loads pretrained model from numpy file containg words, word vectors,
     and lengths"""
-    infile = modeldir+infile+".npy"
+    infile = modeldir + infile + ".npy"
     if not os.path.exists(infile):
         print("Error: vector file does not exist")
         print("Options are: ")
         for f in os.listdir(modeldir):
-            if(os.path.splitext(f)[1] == ".npy"):
-              print(os.path.splitext(f)[0])
+            if os.path.splitext(f)[1] == ".npy":
+                print(os.path.splitext(f)[0])
         exit()
     fp = open(infile, 'rb')
     words = list(np.load(fp))
 
     l = [el.decode('UTF-8') for el in words]
     words = l
-    
+
     vectors = np.load(fp)
     lengths = np.load(fp)
     fp.close()
     return words, vectors, lengths
 
+
 def compute_lengths(npa):
     """returns length of vector"""
-    return np.linalg.norm(npa,axis=1)
+    return np.linalg.norm(npa, axis=1)
+
 
 def cosine_similarity(vec1, len1, vec2, len2):
     """calculates the cosine similarity between two vectors"""
@@ -107,12 +114,12 @@ def closest_vectors(v, length, words, array, lengths, n):
     """
     sims = []
     for i in range(len(words)):
-        sims.append(cosine_similarity(v,length,array[i],lengths[i]))
+        sims.append(cosine_similarity(v, length, array[i], lengths[i]))
     indsort = np.argsort(sims)
     result = []
     for i in range(n):
-        ind = indsort[-1-i]
-        result.append((words[ind],sims[ind]))
+        ind = indsort[-1 - i]
+        result.append((words[ind], sims[ind]))
     return result
 
 
@@ -123,4 +130,4 @@ if __name__ == "__main__":
         print("usage: npyFile must have an .npy extension")
     else:
         words, data = readGlove(argv[1])
-        save_glove_vectors(argv[2],data,words)
+        save_glove_vectors(argv[2], data, words)
