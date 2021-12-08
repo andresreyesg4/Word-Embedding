@@ -1,4 +1,4 @@
-#!/Users/sanmay/opt/anaconda3/bin/python
+#!/usr/bin/python
 """
 Perform a similar test as Caliskan et al (this code does not do a
 permutation test for statistical significance).  You  will provide, in order
@@ -51,7 +51,7 @@ def loadwordlist(filename, reference):
             print(os.path.splitext(f)[0])
         sys.exit()
     omits = []
-    with open(datadir + filename + ".txt", 'r') as f:
+    with open(datadir + filename + ".txt", 'r', encoding='ISO-8859-1') as f:
         words = []
         for w in f.readlines():
             toInsert = w.strip().lower()
@@ -97,6 +97,8 @@ def main():
     target2Name = argv[3]
     attr1Name = argv[4]
     attr2Name = argv[5]
+
+    # print("ARGS", argv)
 
     target1 = loadwordlist(target1Name, wordlist)
     target2 = loadwordlist(target2Name, wordlist)
@@ -157,54 +159,55 @@ def main():
     print("Effect size: %.2f" % d)
 
     print()
-    print("Plotting similarity scores...")
+    # print("Plotting similarity scores...")
 
-    fig = plt.figure(figsize=(16, 8))
-    ax1 = fig.add_subplot(121)
-    ax2 = fig.add_subplot(122)
-    ax1.set_title("Similarities Scores for Target/Attribute Pairs")
-    ax2.set_title("Difference Scores For Each Target")
+    # fig = plt.figure(figsize=(16, 8))
+    # ax1 = fig.add_subplot(121)
+    # ax2 = fig.add_subplot(122)
+    # ax1.set_title("Similarities Scores for Target/Attribute Pairs")
+    # ax2.set_title("Difference Scores For Each Target")
 
-    # Box plot of pairwise similarity scores
-    df = pd.DataFrame()
-    df["Similarity"] = np.concatenate([targ1attr1Sims, targ1attr2Sims, targ2attr1Sims, targ2attr2Sims])
-    df["Pairs"] = [target1Name + "-" + attr1Name] * len(targ1attr1Sims) + [target1Name + "-" + attr2Name] * len(
-        targ1attr2Sims) + [target2Name + "-" + attr1Name] * len(targ2attr1Sims) \
-                  + [target2Name + "-" + attr2Name] * len(targ2attr2Sims)
-    df["Target"] = [target1Name] * len(targ1attr1Sims + targ1attr2Sims) + [target2Name] * len(
-        targ2attr1Sims + targ2attr2Sims)
-    df["Attribute"] = [attr1Name] * len(targ1attr1Sims) + [attr2Name] * len(targ1attr2Sims) + [attr1Name] * len(
-        targ2attr1Sims) + [attr2Name] * len(targ2attr2Sims)
-    sns.boxplot(x="Target", y="Similarity", hue="Attribute", data=df, ax=ax1)
-    # Box plot of target bias in similarities
-    df = pd.DataFrame()
-    df["Difference"] = np.concatenate([targ1SimDiff, targ2SimDiff])
-    df["Target"] = [target1Name] * len(targ1SimDiff) + [target2Name] * len(targ2SimDiff)
-    ax = sns.boxplot(x="Target", y="Difference", data=df, ax=ax2)
+    # # Box plot of pairwise similarity scores
+    # df = pd.DataFrame()
+    # df["Similarity"] = np.concatenate([targ1attr1Sims, targ1attr2Sims, targ2attr1Sims, targ2attr2Sims])
+    # df["Pairs"] = [target1Name + "-" + attr1Name] * len(targ1attr1Sims) + [target1Name + "-" + attr2Name] * len(
+    #     targ1attr2Sims) + [target2Name + "-" + attr1Name] * len(targ2attr1Sims) \
+    #               + [target2Name + "-" + attr2Name] * len(targ2attr2Sims)
+    # df["Target"] = [target1Name] * len(targ1attr1Sims + targ1attr2Sims) + [target2Name] * len(
+    #     targ2attr1Sims + targ2attr2Sims)
+    # df["Attribute"] = [attr1Name] * len(targ1attr1Sims) + [attr2Name] * len(targ1attr2Sims) + [attr1Name] * len(
+    #     targ2attr1Sims) + [attr2Name] * len(targ2attr2Sims)
+    # sns.boxplot(x="Target", y="Similarity", hue="Attribute", data=df, ax=ax1)
+    # # Box plot of target bias in similarities
+    # df = pd.DataFrame()
+    # df["Difference"] = np.concatenate([targ1SimDiff, targ2SimDiff])
+    # df["Target"] = [target1Name] * len(targ1SimDiff) + [target2Name] * len(targ2SimDiff)
+    # ax = sns.boxplot(x="Target", y="Difference", data=df, ax=ax2)
 
-    ticks = ax1.get_yticks()
-    mx = max(abs(ticks[0]), ticks[-1])
-    mx = int(mx * 10 + .99) / 10.0
-    ax1.yaxis.set_ticks(np.arange(-mx, mx + .1, .1))
-    ticks = ax2.get_yticks()
-    mx = max(abs(ticks[0]), ticks[-1])
-    mx = int(mx * 10 + .99) / 10.0
-    ax2.yaxis.set_ticks(np.arange(-mx, mx + .1, .1))
+    # ticks = ax1.get_yticks()
+    # mx = max(abs(ticks[0]), ticks[-1])
+    # mx = int(mx * 10 + .99) / 10.0
+    # ax1.yaxis.set_ticks(np.arange(-mx, mx + .1, .1))
+    # ticks = ax2.get_yticks()
+    # mx = max(abs(ticks[0]), ticks[-1])
+    # mx = int(mx * 10 + .99) / 10.0
+    # ax2.yaxis.set_ticks(np.arange(-mx, mx + .1, .1))
 
-    fig.subplots_adjust(wspace=0.5)
-    fig.canvas.draw()
+    # fig.subplots_adjust(wspace=0.5)
+    # fig.canvas.draw()
 
-    labels = [item.get_text() for item in ax1.get_yticklabels()]
-    labels[0] = "(less similar) " + labels[0]
-    labels[-1] = "(more similar) " + labels[-1]
-    ax1.set_yticklabels(labels)
-    labels = [item.get_text() for item in ax2.get_yticklabels()]
-    labels[0] = "(%s) " % attr2Name + labels[0]
-    labels[len(labels) // 2] = "(neutral) 0.0"
-    labels[-1] = "(%s) " % attr1Name + labels[-1]
-    ax2.set_yticklabels(labels)
+    # labels = [item.get_text() for item in ax1.get_yticklabels()]
+    # labels[0] = "(less similar) " + labels[0]
+    # labels[-1] = "(more similar) " + labels[-1]
+    # ax1.set_yticklabels(labels)
+    # labels = [item.get_text() for item in ax2.get_yticklabels()]
+    # labels[0] = "(%s) " % attr2Name + labels[0]
+    # labels[len(labels) // 2] = "(neutral) 0.0"
+    # labels[-1] = "(%s) " % attr1Name + labels[-1]
+    # ax2.set_yticklabels(labels)
 
-    plt.show()
+    # # plt.show()
+    # plt.savefig("%s/%s" % ("./reports", "%s_%s_%s_%s_%s.png" % (wordlist, target1Name, target2Name, attr1Name, attr2Name)))
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-#!/Users/sanmay/opt/anaconda3/bin/python
+#!/usr/bin/python
 """
 This program will use word embeddings to find the most similar words to a
 provided search word
