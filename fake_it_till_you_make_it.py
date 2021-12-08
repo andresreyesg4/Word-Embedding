@@ -3,21 +3,23 @@
 from subprocess import Popen, PIPE
 
 files = ["twitter", "wikipedia"]
-# targets = [("names_male", "names_female"), ("gender_m",
-#                                             "gender_f"), ("names_africa", "names_europe")]
-# attributes = [("art", "science"), ("career", "family"), ("insects", "flowers"),
-#               ("pleasant", "unpleasant"), ("positive-words", "negative-words")]
+attributes = [("names_male", "names_female"), ("gender_m",
+                                            "gender_f"), ("names_africa", "names_europe")]
+targets = [("art", "science"), ("career", "family"), ("insects", "flowers"),
+              ("pleasant", "unpleasant"), ("positive-words", "negative-words"), 
+              ("computers_and_maths", "medical")]
 
-targets = [("names_male", "names_female"), ("gender_m",
-                                            "gender_f")]
-attributes = [("computers_and_maths", "biology")]
+# attributes = [("names_male", "names_female"), ("gender_m",
+#                                                "gender_f")]
+# targets = [("computers_and_maths", "medical")]
 
 for file in files:
-    for target in targets:
-        for attrs in attributes:
+    for attrs in attributes:
+        for target in targets:
             process = Popen(["./weatTest.py", file, target[0],
                             target[1], attrs[0], attrs[1]], stdout=PIPE)
             (output, err) = process.communicate()
+            # print(output)
             dupOutput = str(output).split("Effect size: ")[
                 1].split("\n\n")[0]
             print("File: %s, targets: (%s, %s), attributes: (%s, %s), Effect size: %s." % (

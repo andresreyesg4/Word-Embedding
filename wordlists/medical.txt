@@ -48,8 +48,6 @@ public
 radiology
 science
 services
-technicians
-technologies
 therapy
 treatment
 zoology
