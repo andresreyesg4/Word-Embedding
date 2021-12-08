@@ -28,3 +28,8 @@ File: wikipedia, targets: (names_africa, names_europe), attributes: (career, fam
 File: wikipedia, targets: (names_africa, names_europe), attributes: (insects, flowers), Effect size: -0.33.
 File: wikipedia, targets: (names_africa, names_europe), attributes: (pleasant, unpleasant), Effect size: -1.14.
 File: wikipedia, targets: (names_africa, names_europe), attributes: (positive-words, negative-words), Effect size: -1.40.
+--
+File: twitter, targets: (names_male, names_female), attributes: (computers_and_maths, medical), Effect size: 1.50.
+File: twitter, targets: (gender_m, gender_f), attributes: (computers_and_maths, medical), Effect size: 0.52.
+File: wikipedia, targets: (names_male, names_female), attributes: (computers_and_maths, medical), Effect size: 1.85.
+File: wikipedia, targets: (gender_m, gender_f), attributes: (computers_and_maths, medical), Effect size: 0.74.

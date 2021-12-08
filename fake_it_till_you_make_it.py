@@ -3,10 +3,14 @@
 from subprocess import Popen, PIPE
 
 files = ["twitter", "wikipedia"]
+# targets = [("names_male", "names_female"), ("gender_m",
+#                                             "gender_f"), ("names_africa", "names_europe")]
+# attributes = [("art", "science"), ("career", "family"), ("insects", "flowers"),
+#               ("pleasant", "unpleasant"), ("positive-words", "negative-words")]
+
 targets = [("names_male", "names_female"), ("gender_m",
-                                            "gender_f"), ("names_africa", "names_europe")]
-attributes = [("art", "science"), ("career", "family"), ("insects", "flowers"),
-              ("pleasant", "unpleasant"), ("positive-words", "negative-words")]
+                                            "gender_f")]
+attributes = [("computers_and_maths", "biology")]
 
 for file in files:
     for target in targets:
