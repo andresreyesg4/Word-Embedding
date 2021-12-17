@@ -1,3 +1,4 @@
 models/
 vectors/
 __pycache__/
+*.txt

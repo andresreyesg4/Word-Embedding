@@ -1,0 +1,55 @@
+File: twitter_glove, targets: (art, science), attributes: (names_male, names_female), Effect size: -0.64.
+File: twitter_glove, targets: (career, family), attributes: (names_male, names_female), Effect size: 1.26.
+File: twitter_glove, targets: (insects, flowers), attributes: (names_male, names_female), Effect size: 1.80.
+File: twitter_glove, targets: (pleasant, unpleasant), attributes: (names_male, names_female), Effect size: -1.17.
+File: twitter_glove, targets: (positive-words, negative-words), attributes: (names_male, names_female), Effect size: -0.58.
+File: twitter_glove, targets: (computers_and_maths, medical), attributes: (names_male, names_female), Effect size: 1.52.
+
+File: twitter_glove, targets: (art, science), attributes: (gender_m, gender_f), Effect size: 0.94.
+File: twitter_glove, targets: (career, family), attributes: (gender_m, gender_f), Effect size: 0.53.
+File: twitter_glove, targets: (insects, flowers), attributes: (gender_m, gender_f), Effect size: 0.77.
+File: twitter_glove, targets: (pleasant, unpleasant), attributes: (gender_m, gender_f), Effect size: -0.09.
+File: twitter_glove, targets: (positive-words, negative-words), attributes: (gender_m, gender_f), Effect size: -0.13.
+File: twitter_glove, targets: (computers_and_maths, medical), attributes: (gender_m, gender_f), Effect size: 0.53.
+
+File: twitter_glove, targets: (art, science), attributes: (names_africa, names_europe), Effect size: -0.66.
+File: twitter_glove, targets: (career, family), attributes: (names_africa, names_europe), Effect size: 0.64.
+File: twitter_glove, targets: (insects, flowers), attributes: (names_africa, names_europe), Effect size: -0.35.
+File: twitter_glove, targets: (pleasant, unpleasant), attributes: (names_africa, names_europe), Effect size: -1.11.
+File: twitter_glove, targets: (positive-words, negative-words), attributes: (names_africa, names_europe), Effect size: -1.25.
+File: twitter_glove, targets: (computers_and_maths, medical), attributes: (names_africa, names_europe), Effect size: -1.25.
+-------
+File: wikipedia_glove, targets: (art, science), attributes: (names_male, names_female), Effect size: -0.92.
+File: wikipedia_glove, targets: (career, family), attributes: (names_male, names_female), Effect size: 1.77.
+File: wikipedia_glove, targets: (insects, flowers), attributes: (names_male, names_female), Effect size: 1.81.
+File: wikipedia_glove, targets: (pleasant, unpleasant), attributes: (names_male, names_female), Effect size: -0.48.
+File: wikipedia_glove, targets: (positive-words, negative-words), attributes: (names_male, names_female), Effect size: -0.16.
+File: wikipedia_glove, targets: (computers_and_maths, medical), attributes: (names_male, names_female), Effect size: 1.85.
+
+File: wikipedia_glove, targets: (art, science), attributes: (gender_m, gender_f), Effect size: -0.97.
+File: wikipedia_glove, targets: (career, family), attributes: (gender_m, gender_f), Effect size: 0.83.
+File: wikipedia_glove, targets: (insects, flowers), attributes: (gender_m, gender_f), Effect size: 1.09.
+File: wikipedia_glove, targets: (pleasant, unpleasant), attributes: (gender_m, gender_f), Effect size: 0.06.
+File: wikipedia_glove, targets: (positive-words, negative-words), attributes: (gender_m, gender_f), Effect size: 0.32.
+File: wikipedia_glove, targets: (computers_and_maths, medical), attributes: (gender_m, gender_f), Effect size: 0.74.
+
+File: wikipedia_glove, targets: (art, science), attributes: (names_africa, names_europe), Effect size: -0.78.
+File: wikipedia_glove, targets: (career, family), attributes: (names_africa, names_europe), Effect size: -0.08.
+File: wikipedia_glove, targets: (insects, flowers), attributes: (names_africa, names_europe), Effect size: -0.33.
+File: wikipedia_glove, targets: (pleasant, unpleasant), attributes: (names_africa, names_europe), Effect size: -1.14.
+File: wikipedia_glove, targets: (positive-words, negative-words), attributes: (names_africa, names_europe), Effect size: -1.40.
+File: wikipedia_glove, targets: (computers_and_maths, medical), attributes: (names_africa, names_europe), Effect size: -1.41.
+
+File: twitter_glove, targets: (art, science), attributes: (countries_africa, countries_europe), Effect size: -0.34.
+File: twitter_glove, targets: (career, family), attributes: (countries_africa, countries_europe), Effect size: -0.49.
+File: twitter_glove, targets: (insects, flowers), attributes: (countries_africa, countries_europe), Effect size: 0.98.
+File: twitter_glove, targets: (pleasant, unpleasant), attributes: (countries_africa, countries_europe), Effect size: -1.50.
+File: twitter_glove, targets: (positive-words, negative-words), attributes: (countries_africa, countries_europe), Effect size: -1.34.
+File: twitter_glove, targets: (computers_and_maths, medical), attributes: (countries_africa, countries_europe), Effect size: -0.79.
+
+File: wikipedia_glove, targets: (art, science), attributes: (countries_africa, countries_europe), Effect size: -0.51.
+File: wikipedia_glove, targets: (career, family), attributes: (countries_africa, countries_europe), Effect size: -0.08.
+File: wikipedia_glove, targets: (insects, flowers), attributes: (countries_africa, countries_europe), Effect size: 1.00.
+File: wikipedia_glove, targets: (pleasant, unpleasant), attributes: (countries_africa, countries_europe), Effect size: -0.07.
+File: wikipedia_glove, targets: (positive-words, negative-words), attributes: (countries_africa, countries_europe), Effect size: -0.69.
+File: wikipedia_glove, targets: (computers_and_maths, medical), attributes: (countries_africa, countries_europe), Effect size: -1.45.

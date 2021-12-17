@@ -60,7 +60,8 @@ def loadwordlist(filename, reference):
             else:
                 omits.append(toInsert)
         if len(omits):
-            print("Warning: the following words from %s are not in the GloVe index: %s" % (filename, ', '.join(omits)))
+            print("Warning: the following words from %s are not in the GloVe index: %s" % (
+                filename, ', '.join(omits)))
     return words
 
 
@@ -109,8 +110,10 @@ def main():
         print(" or not in your learned word embedding data set")
         return
 
-    target1Data, target1Lengths = getListData(target1, wordlist, array, lengths)
-    target2Data, target2Lengths = getListData(target2, wordlist, array, lengths)
+    target1Data, target1Lengths = getListData(
+        target1, wordlist, array, lengths)
+    target2Data, target2Lengths = getListData(
+        target2, wordlist, array, lengths)
     attr1Data, attr1Lengths = getListData(attribute1, wordlist, array, lengths)
     attr2Data, attr2Lengths = getListData(attribute2, wordlist, array, lengths)
 
@@ -146,67 +149,71 @@ def main():
     targ2SimDiff = np.subtract(targ2attr1Sims, targ2attr2Sims)
 
     # effect size is avg difference in similarities divided by standard dev
-    d = (np.average(targ1SimDiff) - np.average(targ2SimDiff)) / np.std(np.concatenate((targ1SimDiff, targ2SimDiff)))
+    d = (np.average(targ1SimDiff) - np.average(targ2SimDiff)) / \
+        np.std(np.concatenate((targ1SimDiff, targ2SimDiff)))
 
     print()
     print("Calculating effect size.  The score is between +2.0 and -2.0.  ")
     print(
         "Positive scores indicate that %s is more associated with %s than %s." % (target1Name, attr1Name, target2Name))
-    print("Or, equivalently, %s is more associated with %s than %s." % (target2Name, attr2Name, target1Name))
+    print("Or, equivalently, %s is more associated with %s than %s." %
+          (target2Name, attr2Name, target1Name))
     print("Negative scores have the opposite relationship.")
     print("Scores close to 0 indicate little to no effect.")
     print()
     print("Effect size: %.2f" % d)
 
     print()
-    # print("Plotting similarity scores...")
+    print("Plotting similarity scores...")
 
-    # fig = plt.figure(figsize=(16, 8))
-    # ax1 = fig.add_subplot(121)
-    # ax2 = fig.add_subplot(122)
-    # ax1.set_title("Similarities Scores for Target/Attribute Pairs")
-    # ax2.set_title("Difference Scores For Each Target")
+    fig = plt.figure(figsize=(16, 8))
+    ax1 = fig.add_subplot(121)
+    ax2 = fig.add_subplot(122)
+    ax1.set_title("Similarities Scores for Target/Attribute Pairs")
+    ax2.set_title("Difference Scores For Each Target")
 
-    # # Box plot of pairwise similarity scores
-    # df = pd.DataFrame()
-    # df["Similarity"] = np.concatenate([targ1attr1Sims, targ1attr2Sims, targ2attr1Sims, targ2attr2Sims])
-    # df["Pairs"] = [target1Name + "-" + attr1Name] * len(targ1attr1Sims) + [target1Name + "-" + attr2Name] * len(
-    #     targ1attr2Sims) + [target2Name + "-" + attr1Name] * len(targ2attr1Sims) \
-    #               + [target2Name + "-" + attr2Name] * len(targ2attr2Sims)
-    # df["Target"] = [target1Name] * len(targ1attr1Sims + targ1attr2Sims) + [target2Name] * len(
-    #     targ2attr1Sims + targ2attr2Sims)
-    # df["Attribute"] = [attr1Name] * len(targ1attr1Sims) + [attr2Name] * len(targ1attr2Sims) + [attr1Name] * len(
-    #     targ2attr1Sims) + [attr2Name] * len(targ2attr2Sims)
-    # sns.boxplot(x="Target", y="Similarity", hue="Attribute", data=df, ax=ax1)
-    # # Box plot of target bias in similarities
-    # df = pd.DataFrame()
-    # df["Difference"] = np.concatenate([targ1SimDiff, targ2SimDiff])
-    # df["Target"] = [target1Name] * len(targ1SimDiff) + [target2Name] * len(targ2SimDiff)
-    # ax = sns.boxplot(x="Target", y="Difference", data=df, ax=ax2)
+    # Box plot of pairwise similarity scores
+    df = pd.DataFrame()
+    df["Similarity"] = np.concatenate(
+        [targ1attr1Sims, targ1attr2Sims, targ2attr1Sims, targ2attr2Sims])
+    df["Pairs"] = [target1Name + "-" + attr1Name] * len(targ1attr1Sims) + [target1Name + "-" + attr2Name] * len(
+        targ1attr2Sims) + [target2Name + "-" + attr1Name] * len(targ2attr1Sims) \
+        + [target2Name + "-" + attr2Name] * len(targ2attr2Sims)
+    df["Target"] = [target1Name] * len(targ1attr1Sims + targ1attr2Sims) + [target2Name] * len(
+        targ2attr1Sims + targ2attr2Sims)
+    df["Attribute"] = [attr1Name] * len(targ1attr1Sims) + [attr2Name] * len(targ1attr2Sims) + [attr1Name] * len(
+        targ2attr1Sims) + [attr2Name] * len(targ2attr2Sims)
+    sns.boxplot(x="Target", y="Similarity", hue="Attribute", data=df, ax=ax1)
+    # Box plot of target bias in similarities
+    df = pd.DataFrame()
+    df["Difference"] = np.concatenate([targ1SimDiff, targ2SimDiff])
+    df["Target"] = [target1Name] * \
+        len(targ1SimDiff) + [target2Name] * len(targ2SimDiff)
+    ax = sns.boxplot(x="Target", y="Difference", data=df, ax=ax2)
 
-    # ticks = ax1.get_yticks()
-    # mx = max(abs(ticks[0]), ticks[-1])
-    # mx = int(mx * 10 + .99) / 10.0
-    # ax1.yaxis.set_ticks(np.arange(-mx, mx + .1, .1))
-    # ticks = ax2.get_yticks()
-    # mx = max(abs(ticks[0]), ticks[-1])
-    # mx = int(mx * 10 + .99) / 10.0
-    # ax2.yaxis.set_ticks(np.arange(-mx, mx + .1, .1))
+    ticks = ax1.get_yticks()
+    mx = max(abs(ticks[0]), ticks[-1])
+    mx = int(mx * 10 + .99) / 10.0
+    ax1.yaxis.set_ticks(np.arange(-mx, mx + .1, .1))
+    ticks = ax2.get_yticks()
+    mx = max(abs(ticks[0]), ticks[-1])
+    mx = int(mx * 10 + .99) / 10.0
+    ax2.yaxis.set_ticks(np.arange(-mx, mx + .1, .1))
 
-    # fig.subplots_adjust(wspace=0.5)
-    # fig.canvas.draw()
+    fig.subplots_adjust(wspace=0.5)
+    fig.canvas.draw()
 
-    # labels = [item.get_text() for item in ax1.get_yticklabels()]
-    # labels[0] = "(less similar) " + labels[0]
-    # labels[-1] = "(more similar) " + labels[-1]
-    # ax1.set_yticklabels(labels)
-    # labels = [item.get_text() for item in ax2.get_yticklabels()]
-    # labels[0] = "(%s) " % attr2Name + labels[0]
-    # labels[len(labels) // 2] = "(neutral) 0.0"
-    # labels[-1] = "(%s) " % attr1Name + labels[-1]
-    # ax2.set_yticklabels(labels)
+    labels = [item.get_text() for item in ax1.get_yticklabels()]
+    labels[0] = "(less similar) " + labels[0]
+    labels[-1] = "(more similar) " + labels[-1]
+    ax1.set_yticklabels(labels)
+    labels = [item.get_text() for item in ax2.get_yticklabels()]
+    labels[0] = "(%s) " % attr2Name + labels[0]
+    labels[len(labels) // 2] = "(neutral) 0.0"
+    labels[-1] = "(%s) " % attr1Name + labels[-1]
+    ax2.set_yticklabels(labels)
 
-    # # plt.show()
+    plt.show()
     # plt.savefig("%s/%s" % ("./reports", "%s_%s_%s_%s_%s.png" % (wordlist, target1Name, target2Name, attr1Name, attr2Name)))
 
 
